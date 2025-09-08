@@ -29,6 +29,12 @@ def gmail_service():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
+            # Create credentials.json from environment variable if it exists
+            credentials_json_content = os.getenv("GOOGLE_CREDENTIALS_JSON")
+            if credentials_json_content:
+                with open("credentials.json", "w") as f:
+                    f.write(credentials_json_content)
+
             flow = InstalledAppFlow.from_client_secrets_file(
                 "credentials.json", SCOPES
             )
